@@ -27,6 +27,7 @@ body{background:var(--bg);color:var(--ink);font-family:'Satoshi',sans-serif;font
 
 /* CURSOR */
 #cdot{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+@media(hover:none){#cdot,#cring{display:none}body{cursor:auto}}
 #cring{position:fixed;width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .35s,height .35s,border-color .3s,opacity .3s}
 body.hov #cdot{width:14px;height:14px}
 body.hov #cring{width:54px;height:54px;border-color:var(--accent);opacity:.6}
@@ -368,23 +369,106 @@ footer{background:var(--ink);color:var(--bg);padding:80px 48px 48px}
   100%{transform:translate(calc(-50% + var(--vx)), calc(-50% + var(--vy))) rotate(600deg);opacity:0}
 }
 /* RESPONSIVE */
+/* ── MOBILE NAV HAMBURGER ── */
+.nav-hamburger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+.nav-hamburger span{
+  width:24px;height:2px;background:var(--ink);
+  border-radius:2px;transition:transform .3s,opacity .3s;
+  display:block;
+}
+.nav-mobile-menu{
+  display:none;position:fixed;inset:0;z-index:199;
+  background:var(--bg);flex-direction:column;
+  justify-content:center;align-items:center;gap:8px;
+  padding:48px 24px;
+}
+.nav-mobile-menu.open{display:flex}
+.nav-mobile-menu a{
+  font-size:1.6rem;font-weight:800;letter-spacing:-.02em;
+  text-decoration:none;color:var(--ink);padding:12px 0;
+  width:100%;text-align:center;border-bottom:1px solid var(--line);
+  transition:color .2s;
+}
+.nav-mobile-menu a:last-child{border-bottom:none;color:var(--accent);margin-top:8px}
+.nav-mobile-menu a:hover{color:var(--accent)}
+.nav-close{
+  position:absolute;top:24px;right:24px;
+  background:none;border:none;font-size:1.5rem;
+  color:var(--ink);cursor:pointer;padding:8px;
+}
+
 @media(max-width:900px){
+  /* NAV */
   nav{padding:0 24px}
-  .nav-links{gap:4px;padding:4px 6px}
-  .nav-links a{padding:6px 10px;font-size:.72rem}
-  .section{padding:64px 24px}
-  .hero{padding:100px 24px 64px}
+  .nav-links{display:none}
+  .nav-hamburger{display:flex}
+
+  /* HERO */
+  .hero{padding:96px 24px 56px;min-height:auto}
+  .hero-eyebrow{font-size:.62rem;margin-bottom:24px}
+  .hero-heading{font-size:clamp(3.2rem,12vw,5rem);margin-bottom:40px}
   .hero-deco{display:none}
-  .hero-bottom{flex-direction:column;align-items:flex-start;gap:28px}
-  .proj-card{width:280px}
-  #sobre-mi{grid-template-columns:1fr;gap:40px}
+  .hero-bottom{flex-direction:column;align-items:flex-start;gap:24px}
+  .hero-bio{font-size:.9rem;max-width:100%}
+  .hero-actions{flex-direction:column;width:100%;gap:10px}
+  .btn-fill,.btn-ghost{width:100%;justify-content:center;padding:16px}
+
+  /* SECTIONS */
+  .section{padding:56px 24px}
+  .sec-title{font-size:clamp(2rem,8vw,3rem)}
+
+  /* SLIDER */
+  .proj-header{flex-direction:row;align-items:center;margin-bottom:32px}
+  .proj-card{width:calc(85vw);max-width:340px}
+  .proj-card-name{font-size:1rem}
+
+  /* SOBRE MÍ */
+  #sobre-mi{grid-template-columns:1fr;gap:32px}
+  #sobre-mi .about-img-wrap{max-width:280px;margin:0 auto}
+  .about-badge{bottom:-8px;left:-8px}
+  .about-location{top:12px;right:-8px}
+
+  /* STATS GRID */
+  #sobre-mi [style*="grid-template-columns:repeat(3"]{
+    grid-template-columns:repeat(3,1fr) !important;
+    gap:10px !important;
+  }
+
+  /* EXPERIENCIA */
+  #experiencia [style*="grid-template-columns:200px"]{
+    grid-template-columns:1fr !important;
+    gap:8px !important;
+    padding:28px 0 !important;
+  }
+
+  /* SERVICIOS */
   .srv-grid{grid-template-columns:1fr 1fr}
-  footer{padding:56px 24px 40px}
+  .srv-card{padding:28px 20px}
+  .srv-name{font-size:1rem}
+
+  /* FOOTER */
+  footer{padding:48px 24px 32px}
+  .footer-big{font-size:clamp(2.2rem,9vw,4rem);margin-bottom:40px}
   .footer-row{flex-direction:column;gap:16px;align-items:flex-start}
 }
-@media(max-width:600px){
+
+@media(max-width:480px){
   .srv-grid{grid-template-columns:1fr}
-  .proj-card{width:260px}
+  .proj-card{width:calc(90vw)}
+  .hero-heading{font-size:clamp(2.8rem,13vw,4rem)}
+
+  /* Stats 1 col en muy pequeño */
+  #sobre-mi [style*="grid-template-columns:repeat(3"]{
+    grid-template-columns:repeat(3,1fr) !important;
+  }
+
+  /* Experiencia ocultar columna de fecha en muy pequeño */
+  #experiencia [style*="grid-template-columns:200px"] > div:first-child{
+    display:flex;gap:12px;align-items:center;
+  }
 }
 </style>
 </head>
@@ -403,7 +487,20 @@ footer{background:var(--ink);color:var(--bg);padding:80px 48px 48px}
     <li><a href="#servicios">Servicios</a></li>
     <li><a href="mailto:r.belenramos@gmail.com" class="nav-cta">Contacto</a></li>
   </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="mobileMenu">
+  <button class="nav-close" id="menuClose">✕</button>
+  <a href="#proyectos" class="menu-link">Proyectos</a>
+  <a href="#experiencia" class="menu-link">Experiencia</a>
+  <a href="#sobre-mi" class="menu-link">Sobre mí</a>
+  <a href="#servicios" class="menu-link">Servicios</a>
+  <a href="mailto:r.belenramos@gmail.com">Contacto →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1394,6 +1491,26 @@ footer{background:var(--ink);color:var(--bg);padding:80px 48px 48px}
 </footer>
 
 <script>
+// HAMBURGER MENU
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+menuClose.addEventListener('click', () => {
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+});
+document.querySelectorAll('.menu-link').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
 // CARDS → proyecto
 document.querySelectorAll('.proj-card').forEach(card => {
   const img = card.querySelector('img');
